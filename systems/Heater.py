@@ -1,3 +1,4 @@
+from utils.stabilizer import Stabilizer
 from utils.state_machines import StateMachine, State
 
 
@@ -5,13 +6,14 @@ class ErrorState(State):
     __state_name = "Error"
 
     def on_start(self):
-        print("Going to sleep.")
+        print("Error: Cooling Down!")
+        Stabilizer().cool_down()
 
     def update(self, environment):
-        print("Sleeping.")
+        environment["error"] = True
 
     def on_exit(self):
-        print("Waking up.")
+        pass
 
 
 class NormalState(State):
@@ -21,13 +23,13 @@ class NormalState(State):
         self.stabilizer = Stabilizer()
 
     def on_start(self):
-        print("Going to sleep.")
+        pass
 
     def update(self, environment):
         self.stabilizer.update(environment)
 
     def on_exit(self):
-        print("Waking up.")
+        pass
 
 
 class HeaterStateMachine(StateMachine):
@@ -36,6 +38,6 @@ class HeaterStateMachine(StateMachine):
 
     def update(self, environment):
         if self._is_state(NormalState):
-            if environment["current_temperature"] >= environment["panic_temperature"]:
+            if environment["current_temp"] >= environment["panic_temp"]:
                 self._change_state(ErrorState)
         self.current_state.update(environment)
