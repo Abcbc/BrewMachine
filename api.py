@@ -1,6 +1,10 @@
+from threading import Thread
+
 from flask import Flask, jsonify
 from flask_restful import Resource, Api
-class HealthApi:
+
+
+class HealthApi(Thread):
     class HealthCheck(Resource):
 
         def __init__(self, **kwargs):
@@ -11,10 +15,16 @@ class HealthApi:
                             "current_temp": self.environment["current_temp"],
                             "error": self.environment["error"]})
 
+    class Shutdown(Resource):
+        def get(self):
+            pass
 
     def __init__(self, data):
+        self.app = Flask(__name__)
+        self.api = Api(self.app)
+
         self.api.add_resource(HealthApi.HealthCheck, "/health", resource_class_kwargs=data)
-
-
+        self.api.add_resource(HealthApi.Shutdown, "/quit")
+        super().__init__()
     def run(self):
-        self.app.run(port=6666)
+        self.app.run(port=80)

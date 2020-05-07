@@ -1,6 +1,7 @@
 from multiprocessing import Manager
 from time import sleep
 
+from api import HealthApi
 from systems.Heater import HeaterStateMachine, ErrorState
 from utils.Sensors import Temperatur
 
@@ -14,10 +15,16 @@ def main():
                          "error": False})
     temp_sensor = Temperatur()
     state_machine = HeaterStateMachine();
+
+    thread = HealthApi(data)
+    thread.start()
+
     while not state_machine.in_state(ErrorState):
         data.update({"current_temp": temp_sensor.get()})
+        print(data)
         state_machine.update(data)
         sleep(3.)
+    thread.join(10.0)
 
 
 if __name__ == "__main__":
