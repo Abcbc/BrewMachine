@@ -4,24 +4,27 @@ from time import sleep
 from api import HealthApi
 from systems.Heater import HeaterStateMachine, ErrorState
 from utils.Sensors import Temperatur
+from queue import Queue
 
 
 def main():
-    manager = Manager()
-    data = manager.dict({"current_temp": 0.0,
-                         "desired_temp": 25.0,
-                         "max_temp": 30.0,
-                         "pc_heat_level": 0.0,
-                         "error": False})
-    temp_sensor = Temperatur()
-    state_machine = HeaterStateMachine();
 
-    thread = HealthApi(data)
+    message_queue = Queue()
+    data = {"current_temp": 0.0,
+            "desired_temp": 25.0,
+            "max_temp": 30.0,
+            "pc_heat_level": 0.0,
+            "error": False}
+
+    temp_sensor = Temperatur()
+    state_machine = HeaterStateMachine()
+
+    thread = HealthApi(message_queue=message_queue)
     thread.start()
 
     while not state_machine.in_state(ErrorState):
         data.update({"current_temp": temp_sensor.get()})
-        print(data)
+        message_queue.put(data)
         state_machine.update(data)
         sleep(3.)
     thread.join(10.0)

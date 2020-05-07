@@ -5,26 +5,37 @@ from flask_restful import Resource, Api
 
 
 class HealthApi(Thread):
+
     class HealthCheck(Resource):
 
         def __init__(self, **kwargs):
-            self.environment = kwargs
+            self.api = kwargs["API"]
+            self.environment = {}
 
         def get(self):
-            return jsonify({"pc_heat_level": self.environment["pc_heat_level"],
-                            "current_temp": self.environment["current_temp"],
-                            "error": self.environment["error"]})
+            self.api.update_message()
+            return jsonify({"pc_heat_level": self.api.environment.get("pc_heat_level"),
+                            "current_temp": self.api.environment.get("current_temp"),
+                            "error": self.api.environment.get("error")})
+
+
 
     class Shutdown(Resource):
         def get(self):
             pass
 
-    def __init__(self, data):
+    def __init__(self, message_queue):
+        self.message_queue = message_queue
+        self.environment = {}
         self.app = Flask(__name__)
         self.api = Api(self.app)
 
-        self.api.add_resource(HealthApi.HealthCheck, "/health", resource_class_kwargs=data)
+        self.api.add_resource(HealthApi.HealthCheck, "/health", resource_class_kwargs={"API": self})
         self.api.add_resource(HealthApi.Shutdown, "/quit")
         super().__init__()
     def run(self):
         self.app.run(port=80)
+
+    def update_message(self):
+        while not self.message_queue.empty():
+            self.environment = self.message_queue.get()
