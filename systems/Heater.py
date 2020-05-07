@@ -37,7 +37,8 @@ class HeaterStateMachine(StateMachine):
         self.current_state = NormalState()
 
     def update(self, environment):
-        if self._is_state(NormalState):
-            if environment["current_temp"] >= environment["panic_temp"]:
+        if self.in_state(NormalState):
+            if environment["current_temp"] >= environment["max_temp"]:
                 self._change_state(ErrorState)
         self.current_state.update(environment)
+

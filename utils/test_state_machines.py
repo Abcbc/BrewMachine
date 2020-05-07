@@ -47,15 +47,15 @@ class WorkStateMachine(StateMachine):
         self.current_state = HomeState()
 
     def update(self, environment):
-        if self._is_state(HomeState):
+        if self.in_state(HomeState):
             if environment == "SLEEP":
                 self._change_state(BedState)
             elif environment == "TAKE_TRAIN":
                 self._change_state(WorkState)
-        elif self._is_state(BedState):
+        elif self.in_state(BedState):
             if environment == "WAKE":
                 self._change_state(HomeState)
-        elif self._is_state(WorkState):
+        elif self.in_state(WorkState):
             if environment == "TAKE_TRAIN":
                 self._change_state(HomeState)
 

@@ -17,7 +17,7 @@ class StateMachine:
         self.current_state = stateClass()
         self.current_state.on_start()
 
-    def _is_state(self, state):
+    def in_state(self, state):
         return isinstance(self.current_state, state)
 
 
