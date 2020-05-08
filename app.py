@@ -1,10 +1,10 @@
 import logging
 import OPi.GPIO as GPIO
-
+import config
 from time import sleep
 from utils.logger import setup_logger
 from api import HealthApi
-from systems.Heater import HeaterStateMachine, ErrorState
+from systems.temperature_regulation import TemperatureRegulationStateMachine, ErrorState
 from utils.Sensors import TemperatureSensor
 from queue import Queue
 
@@ -23,15 +23,17 @@ def main():
     log.info("Message Queue Initialized.")
 
     data = {"current_temp": 0.0,
-            "desired_temp": 25.0,
-            "max_temp": 30.0,
+            "desired_temp": config.stabilizer_desired_temp,
+            "lower_limit": config.stabilizer_lower_temp_limit,
+            "higher_limit": config.stabilizer_higher_temp_limit,
+            "dangerous_temp": config.stabilizer_dangerous_temp,
             "pc_heat_level": 0.0,
             "error": False}
 
     temp_sensor = TemperatureSensor(0)
     log.info("Sensors Initialized.")
 
-    state_machine = HeaterStateMachine()
+    state_machine = TemperatureRegulationStateMachine()
     log.info("State Machine Initialized.")
     thread = HealthApi(message_queue=message_queue)
     thread.start()

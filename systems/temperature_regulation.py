@@ -34,13 +34,13 @@ class NormalState(State):
         pass
 
 
-class HeaterStateMachine(StateMachine):
+class TemperatureRegulationStateMachine(StateMachine):
     def __init__(self):
         self.current_state = NormalState()
 
     def update(self, environment):
         if self.in_state(NormalState):
-            if environment["current_temp"] >= environment["max_temp"]:
+            if environment["current_temp"] >= environment["dangerous_temp"]:
                 self._change_state(ErrorState)
         self.current_state.update(environment)
 
