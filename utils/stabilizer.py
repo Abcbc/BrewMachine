@@ -3,6 +3,7 @@ from utils.Actors import Heater, Cooler, EmptyBiSwitchActor
 
 class Stabilizer:
     def __init__(self):
+
         self.heater = Heater()
         self.cooler = EmptyBiSwitchActor()
 

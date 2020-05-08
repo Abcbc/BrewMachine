@@ -5,10 +5,13 @@ from api import HealthApi
 from systems.Heater import HeaterStateMachine, ErrorState
 from utils.Sensors import TemperatureSensor
 from queue import Queue
+import OPi.GPIO as GPIO
 
 
 def main():
 
+    GPIO.setboard(GPIO.ZERO)
+    GPIO.setmode(GPIO.BOARD)
     message_queue = Queue()
     data = {"current_temp": 0.0,
             "desired_temp": 25.0,
