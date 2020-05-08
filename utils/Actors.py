@@ -1,5 +1,5 @@
 import config
-import OrangePi.GPIO as GPIO
+import OPi.GPIO as GPIO
 
 
 class BiSwitchActor:
