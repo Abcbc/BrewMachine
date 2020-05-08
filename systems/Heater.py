@@ -1,12 +1,14 @@
 from utils.stabilizer import Stabilizer
 from utils.state_machines import StateMachine, State
+import logging
 
+log = logging.getLogger(__name__)
 
 class ErrorState(State):
     __state_name = "Error"
 
     def on_start(self):
-        print("Error: Cooling Down!")
+        log.error("Emergency: Cooling Down!")
         Stabilizer().cool_down()
 
     def update(self, environment):
