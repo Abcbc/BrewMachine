@@ -16,7 +16,7 @@ def main():
             "pc_heat_level": 0.0,
             "error": False}
 
-    temp_sensor = TemperatureSensor()
+    temp_sensor = TemperatureSensor(0)
     state_machine = HeaterStateMachine()
 
     thread = HealthApi(message_queue=message_queue)
