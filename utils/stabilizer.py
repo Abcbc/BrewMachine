@@ -14,7 +14,7 @@ class Stabilizer:
         lower_limit = environment["lower_limit"]
         higher_limit = environment["lower_limit"]
         self.calculate_efficiency(current_temp, desired_temp)
-        
+
         log.info("Current Temperature: {} C° ".format(current_temp))
         log.info("Desired Temperature: {} C° ".format(desired_temp))
         log.info("Efficiency: {}".format(self.efficients))
@@ -30,7 +30,7 @@ class Stabilizer:
 
     def calculate_efficiency(self, current_temp, desired_temp):
         self.efficients /= 3
-        self.efficients += 2 / 3 * (abs(desired_temp - current_temp) / desired_temp)
+        self.efficients += 2 / 3 * (1.0- (abs(desired_temp - current_temp) / desired_temp))
         self.efficients /= 2
 
     def cool_down(self):
