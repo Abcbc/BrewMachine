@@ -3,7 +3,7 @@ from time import sleep
 
 from api import HealthApi
 from systems.Heater import HeaterStateMachine, ErrorState
-from utils.Sensors import Temperatur
+from utils.Sensors import TemperatureSensor
 from queue import Queue
 
 
@@ -16,7 +16,7 @@ def main():
             "pc_heat_level": 0.0,
             "error": False}
 
-    temp_sensor = Temperatur()
+    temp_sensor = TemperatureSensor()
     state_machine = HeaterStateMachine()
 
     thread = HealthApi(message_queue=message_queue)

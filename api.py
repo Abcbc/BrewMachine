@@ -18,8 +18,6 @@ class HealthApi(Thread):
                             "current_temp": self.api.environment.get("current_temp"),
                             "error": self.api.environment.get("error")})
 
-
-
     class Shutdown(Resource):
         def get(self):
             pass
@@ -33,8 +31,10 @@ class HealthApi(Thread):
         self.api.add_resource(HealthApi.HealthCheck, "/health", resource_class_kwargs={"API": self})
         self.api.add_resource(HealthApi.Shutdown, "/quit")
         super().__init__()
+
     def run(self):
         self.app.run(port=80)
+
 
     def update_message(self):
         while not self.message_queue.empty():
