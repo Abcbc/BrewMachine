@@ -3,6 +3,8 @@ from threading import Thread
 from flask import Flask, jsonify
 from flask_restful import Resource, Api
 
+import config
+
 
 class HealthApi(Thread):
 
@@ -33,7 +35,7 @@ class HealthApi(Thread):
         super().__init__()
 
     def run(self):
-        self.app.run(port=80)
+        self.app.run(port=config.port)
 
 
     def update_message(self):

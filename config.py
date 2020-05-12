@@ -9,3 +9,6 @@ stabilizer_lower_temp_limit = 45.0
 stabilizer_desired_temp = 50.0
 stabilizer_higher_temp_limit = 51.0
 stabilizer_dangerous_temp = 60.0
+
+# WEB
+port = 8888
