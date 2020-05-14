@@ -35,7 +35,7 @@ class HealthApi(Thread):
         super().__init__()
 
     def run(self):
-        self.app.run(port=config.port)
+        self.app.run(port=config.port, host="0.0.0.0")
 
 
     def update_message(self):
